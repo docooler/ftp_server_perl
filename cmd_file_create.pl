@@ -38,6 +38,11 @@ sub create_require_param_func {
 
      print $cmd_file "\n\n\n";
      print $cmd_file "#start ${cmd} command handler\n";
+     print $cmd_file "#func: if ${cmd} command need param\n";
+     print $cmd_file "#input: none\n";
+     print $cmd_file "#output: \n";
+     print $cmd_file "#        true  :need param\n";
+     print $cmd_file "#        false :no need param\n";
      print $cmd_file "sub _${cmd}_require_parem {
      #TODO
 } \n\n"
@@ -46,6 +51,11 @@ sub create_require_param_func {
 sub create_require_auth_func {
      my($cmd_file) = shift;
      my($cmd) = @_;
+     print $cmd_file "#func: auth wheather user could execute ${cmd} command\n";
+     print $cmd_file "#input: none\n";
+     print $cmd_file "#output:\n";
+     print $cmd_file "#        true  :auth pass \n";
+     print $cmd_file "#        false :auth failed\n";
      print $cmd_file "sub _${cmd}_require_auth {
      #TODO
 }\n\n"
@@ -54,6 +64,12 @@ sub create_require_auth_func {
 sub create_execute_func {
      my($cmd_file) = shift;
      my($cmd) = @_;
+     print $cmd_file "#func: execute ${cmd} command\n";
+     print $cmd_file "#input: ftp_session \n";
+     print $cmd_file "#       param string \n";
+     print $cmd_file "#output:\n";
+     print $cmd_file "#        true  :execute pass \n";
+     print $cmd_file "#        false :execute failed\n";
      print $cmd_file "sub _${cmd}_execute {
      #TODO
 }\n\n"
@@ -70,7 +86,11 @@ sub main {
      print CMD_FILE "#this is file is auto create by cmd_file_create.pl
 #at first we have a lot of command need to support 
 #but all the funcs looks like same. so we could create
-#it by a perl scretp\n";
+#it by a perl scretp\n\n";
+
+     print CMD_FILE "###########################################\n";
+     print CMD_FILE "#start command handler here\n";
+     print CMD_FILE "###########################################\n";
 
      my($file_hd) = \*CMD_FILE;
 
