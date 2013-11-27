@@ -1,7 +1,85 @@
-#this is file is auto create by cmd_file_create.pl
-#at first we have a lot of command need to support 
-#but all the funcs looks like same. so we could create
-#it by a perl scretp
+#! /usr/bin/perl
+package Cmdftp;
+require Exporter;
+
+our @ISA = qw (Exporter);
+our @EXPORT = qw (init_cmd
+				  cmd_handle
+				  cmd_handle_table
+				  @_default_commands);
+our $VERSION = 1.00;
+
+
+use strict;
+
+# Global variables and constants.
+use vars qw(@_default_commands
+			%cmd_map
+	       );
+
+@_default_commands
+  = (
+     # Standard commands from RFC 959.
+     "USER", "PASS", "ACCT", "CWD", "CDUP", "SMNT",
+     "REIN", "QUIT", "PORT", "PASV", "TYPE", "STRU",
+     "MODE", "RETR", "STOR", "STOU", "APPE", "ALLO",
+     "REST", "RNFR", "RNTO", "ABOR", "DELE", "RMD",
+     "MKD", "PWD", "LIST", "NLST", "SITE", "SYST",
+     "STAT", "HELP", "NOOP",
+     # RFC 1123 section 4.1.3.1 recommends implementing these.
+     "XMKD", "XRMD", "XPWD", "XCUP", "XCWD",
+     # From RFC 2389.
+     "FEAT", "OPTS",
+     # From ftpexts Internet Draft.
+     "SIZE", "MDTM", "MLST", "MLSD",
+     # Mail handling commands from obsolete RFC 765.
+     "MLFL", "MAIL", "MSND", "MSOM", "MSAM", "MRSQ",
+     "MRCP",
+     # I18N support from RFC 2640.
+     "LANG",
+     # NcFTP sends the CLNT command, I know not from what RFC.
+     "CLNT",
+     # Experimental IP-less virtual hosting.
+     "HOST",
+    );
+
+my %cmd_map ={};
+sub init_cmd{
+	
+	foreach (@_default_commands) {
+		my $require_param = "_${_}_require_param";
+		my $require_auth  = "_${_}_require_auth";
+		my $execute       = "_${_}_execute";
+	    $cmd_map{$_} = {"require_param" =>\&$require_param,
+						  "require_auth"  =>\&$require_auth,
+						  "execute"       =>\&$execute
+			             }; 
+	    
+    }
+}
+
+sub cmd_handle {
+	my($session, $cmd, $param) = @_;
+    my($com_obj) = \$cmd_map{$cmd};
+    
+    if ($cmd_obj{"require_auth"}->()) {
+    	# body...TODO
+    }
+
+    if ($cmd_obj{"require_param"}->() && $param == undef) {
+    	print "error : command ${cmd} need param\n";
+    	return false;
+    }
+
+    if ($cmd_obj{"execute"}->($session, $param)) {
+    	return true;
+    } else {
+    	return false;
+    }
+}
+
+
+
 
 ###########################################
 #start command handler here
@@ -2058,3 +2136,6 @@ sub _HOST_execute {
 
 }
 
+
+
+1;

@@ -45,6 +45,7 @@ sub create_require_param_func {
      print $cmd_file "#        false :no need param\n";
      print $cmd_file "sub _${cmd}_require_parem {
      #TODO
+     print \"_${cmd}_require_parem is called!\";\n
 } \n\n"
 }
 
@@ -58,6 +59,7 @@ sub create_require_auth_func {
      print $cmd_file "#        false :auth failed\n";
      print $cmd_file "sub _${cmd}_require_auth {
      #TODO
+     print \"_${cmd}_require_auth is called!\";\n
 }\n\n"
 }
 
@@ -72,6 +74,7 @@ sub create_execute_func {
      print $cmd_file "#        false :execute failed\n";
      print $cmd_file "sub _${cmd}_execute {
      #TODO
+     print \"_${cmd}_execute is called!\" ;\n
 }\n\n"
 }
 
