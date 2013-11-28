@@ -3,11 +3,11 @@ use IPC::SysV qw(IPC_PRIVATE S_IRUSR S_IWUSR IPC_CREAT IPC_EXCL SEM_UNDO);
 use IPC::Semaphore;  
 
 my $sem;  
-if ($sem=IPC::Semaphore->new(1234,1,  
+if ($sem=IPC::Semaphore->new("CONFIG_SEM",1,  
             S_IRUSR | S_IWUSR | IPC_CREAT | IPC_EXCL)) {  # 能创建，说明‘1234’是第一次创建  
     $sem->setall(0);                             # 初始化所有信号灯为1  
 } else {                                                  # 不能创建，说明‘1234’已存在  
-    $sem=IPC::Semaphore->new(1234,1,                     # 获得‘1234’信号灯集  
+    $sem=IPC::Semaphore->new("CONFIG_SEM",1,                     # 获得‘1234’信号灯集  
             S_IRUSR | S_IWUSR | IPC_CREAT);  
 }  
 
@@ -69,9 +69,9 @@ sub test_case {
 	}
 
 	waitpid($pid,0);
+	$sem->remove;  
     print "test_case end\n";
 }
 
 test_case();
 
-$sem->remove;  
